@@ -17,4 +17,5 @@ var svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
 
 var scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-
+var axisX = 'smoker';
+var axisY = 'age';
