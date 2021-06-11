@@ -17,5 +17,21 @@ var svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
 
 var scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-var axisX = 'smoker';
 var axisY = 'age';
+var axisX = 'smoker';
+
+function scaleY(censusData, axisY) {
+    let scaleY = d3.scaleLinear().domain([d3.min(censusData, d => d[axisY]) * 0.8,
+                                          d3.max(censusData, d => d[axisY]) * 1.2])
+                                 .range([height, 0]);
+                        
+    return scaleY;
+}
+
+function scaleX(censusData, axisX) {
+    let scalex = d3.scaleLinear().domain([d3.min(censusData, d => d[axisX]) * 0.8,
+                                          d3.max(censusData, d => d[axisX]) * 1.2])
+                                 .range([height, 0]);
+                        
+    return scaleX;
+}
