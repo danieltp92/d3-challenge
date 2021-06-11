@@ -59,3 +59,23 @@ function circles(allCircles, scaleY, scaleX, axisY, axisX) {
     return allCircles;
 }
 
+function text(allText, scaleY, scaleX, axisY, axisX) {
+
+    allText.transition().duration(1500).attr('y', data => scaleY(data[axisY])).attr('x', data => scaleX(data[axisX]))
+
+    return allCircles;
+}
+
+function xStyle(value, axisX) {
+
+    if (axisX === 'smoker') {
+        return `${value}%`;
+    }
+    else if (axisX === 'age') {
+        return `${value}%`;
+    }
+    else {
+        return `${value}%`;
+    }
+}
+
