@@ -35,3 +35,27 @@ function scaleX(censusData, axisX) {
                         
     return scaleX;
 }
+
+function axisY(scaleY, y) {
+    let axis1 = d3.leftAxis(scaleY);
+
+    y.transition().duration(1500).call(axis1);
+
+    return y;
+}
+
+function axisX(scaleX, x) {
+    let axis2 = d3.bottomAxis(scaleX);
+
+    x.transition().duration(1500).call(axis2);
+
+    return x;
+}
+
+function circles(allCircles, scaleY, scaleX, axisY, axisX) {
+
+    allCircles.transition().duration(1500).attr('cy', data => scaleY(data[axisY])).attr('cx', data => scaleX(data[axisX]))
+
+    return allCircles;
+}
+
