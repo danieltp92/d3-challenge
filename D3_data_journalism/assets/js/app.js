@@ -147,7 +147,7 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .attr('x', d => xLinearScale(d[chosenXAxis]))
     .attr('y', d => yLinearScale(d[chosenYAxis]))
     .attr('dy', 3)
-    .attr('font-size', '10px')
+    .attr('font-size', '25px')
     .text(function(d){return d.abbr});
 
     
@@ -158,8 +158,8 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
       .classed('stateCircle', true)
       .attr('cx', d => xLinearScale(d[chosenXAxis]))
       .attr('cy', d => yLinearScale(d[chosenYAxis]))
-      .attr('r', 14)
-      .attr('opacity', '.5');
+      .attr('r', 17)
+      .attr('opacity', '.8');
 
       
     var yLabelsGroup = chartGroup.append('g').attr('transform', `translate(${width / 2}, ${height + 10 + margin.top})`);
@@ -170,7 +170,7 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .attr('x', 0)
     .attr('y', 40)
     .attr('value', 'age')
-    .text('Age (Median)'); 
+    .text('Age'); 
 
     var incomeLabel = yLabelsGroup.append('text')
     .classed('aText', true)
@@ -178,7 +178,7 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .attr('x', 0)
     .attr('y', 60)
     .attr('value', 'income')
-    .text('Household Income (Median)');
+    .text('Household Income');
 
     var povertyLabel = yLabelsGroup.append('text')
       .classed('aText', true)
@@ -303,4 +303,3 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
   
     
  
-});
