@@ -150,4 +150,16 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .attr('font-size', '10px')
     .text(function(d){return d.abbr});
 
+    
+    var circlesGroup = chartGroup.selectAll('circle')
+      .data(censusData)
+      .enter()
+      .append('circle')
+      .classed('stateCircle', true)
+      .attr('cx', d => xLinearScale(d[chosenXAxis]))
+      .attr('cy', d => yLinearScale(d[chosenYAxis]))
+      .attr('r', 14)
+      .attr('opacity', '.5');
+
+
 });
