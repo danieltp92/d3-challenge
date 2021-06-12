@@ -161,5 +161,32 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
       .attr('r', 14)
       .attr('opacity', '.5');
 
+      
+    var yLabelsGroup = chartGroup.append('g').attr('transform', `translate(${width / 2}, ${height + 10 + margin.top})`);
 
+    var povertyLabel = yLabelsGroup.append('text')
+      .classed('aText', true)
+      .classed('active', true)
+      .attr('x', 0)
+      .attr('y', 20)
+      .attr('value', 'poverty')
+      .text('In Poverty (%)');
+      
+    var ageLabel = yLabelsGroup.append('text')
+      .classed('aText', true)
+      .classed('inactive', true)
+      .attr('x', 0)
+      .attr('y', 40)
+      .attr('value', 'age')
+      .text('Age (Median)');  
+
+    var incomeLabel = yLabelsGroup.append('text')
+      .classed('aText', true)
+      .classed('inactive', true)
+      .attr('x', 0)
+      .attr('y', 60)
+      .attr('value', 'income')
+      .text('Household Income (Median)')
+
+ 
 });
