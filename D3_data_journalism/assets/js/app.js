@@ -1,122 +1,125 @@
 
-let svgHeight = 700;
-let svgWidth = 1200;
+
+
+let svgWidth = 960;
+let svgHeight = 620;
 let margin = {
-    top: 10,
-    bottom: 50,
-    right: 20,
-    left: 40
+  top: 20, 
+  right: 40, 
+  bottom: 200,
+  left: 100
+};
+
+let height = svgHeight - margin.top - margin.bottom;
+let width = svgWidth - margin.right - margin.left;
+
+let chart = d3.select('#scatter').append('div').classed('chart', true);
+
+let svg = chart.append('svg').attr('width', svgWidth).attr('height', svgHeight);
+
+let chartGroup = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+let chosenYAxis = 'smokes';
+let chosenXAxis = 'age';
+
+function yScale(censusData, chosenYAxis) { 
+    let yLinearScale = d3.scaleLinear().domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8, d3.max(censusData, d => d[chosenYAxis]) * 1.2]).range([height, 0]);
+  
+    return yLinearScale;
 }
 
-let height = svgHeight - margin.bottom - margin.top;
-let width = svgWidth - margin.left - margin.right;
+function xScale(censusData, chosenXAxis) {
+    let xLinearScale = d3.scaleLinear().domain([d3.min(censusData, d => d[chosenXAxis]) * 0.8, d3.max(censusData, d => d[chosenXAxis]) * 1.2]).range([0, width]);
 
-let scat = d3.select("#scatter").append('div').classed('chart', true);
-
-let svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
-
-let scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-let axisY = 'age';
-let axisX = 'smokes';
-
-function scaleY(allData, axisY) {
-    let scaleY = d3.scaleLinear().domain([d3.min(allData, d => d[axisY]) * 0.8,
-                                          d3.max(allData, d => d[axisY]) * 1.2])
-                                 .range([height, 0]);
-                        
-    return scaleY;
+    return xLinearScale;
 }
 
-function scaleX(allData, axisX) {
-    let scalex = d3.scaleLinear().domain([d3.min(allData, d => d[axisX]) * 0.8,
-                                          d3.max(allData, d => d[axisX]) * 1.2])
-                                 .range([height, 0]);
-                        
-    return scaleX;
+function renderYAxis(newYScale, yAxis) {
+    var leftAxis = d3.axisLeft(newYScale);
+  
+    yAxis.transition().duration(1500).call(leftAxis);
+  
+    return yAxis;
 }
 
-function funAxisY(scaleY, y) {
-    let axis1 = d3.leftAxis(scaleY);
+function renderXAxis(newXScale, xAxis) {
+  let bottomAxis = d3.axisBottom(newXScale);
 
-    y.transition().duration(1500).call(axis1);
+  xAxis.transition().duration(1500).call(bottomAxis);
 
-    return y;
+  return xAxis;
 }
 
-function funAxisX(scaleX, x) {
-    var axis2 = d3.bottomAxis(scaleX);
+function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
-    x.transition().duration(1500).call(axis2);
-
-    return x;
+    circlesGroup.transition().duration(1500).attr('cx', data => newXScale(data[chosenXAxis])).attr('cy', data => newYScale(data[chosenYAxis]))
+    
+    return circlesGroup;
 }
 
-function circles(allCircles, scaleY, scaleX, funAxisY, funAxisX) {
+function renderText(textGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
-    allCircles.transition().duration(1500).attr('cy', data => scaleY(data[funAxisY])).attr('cx', data => scaleX(data[funAxisX]))
+    textGroup.transition().duration(1500).attr('x', d => newXScale(d[chosenXAxis])).attr('y', d => newYScale(d[chosenYAxis]));
 
-    return allCircles;
+    return textGroup
 }
 
-function text(allText, scaleY, scaleX, funAxisY, funAxisX) {
+function styleX(value, chosenXAxis) {
 
-    allText.transition().duration(1500).attr('y', data => scaleY(data[funAxisY])).attr('x', data => scaleX(data[funAxisX]))
-
-    return allCircles;
-}
-
-function xStyle(value, axisX) {
-
-    if (axisX === 'smoker') {
+    if (chosenXAxis === 'smokes') {
         return `${value}%`;
     }
-    else if (axisX === 'age') {
-        return `${value}%`;
+    
+    else if (chosenXAxis === 'poverty') {
+        return `${value}`;
     }
     else {
-        return `${value}%`;
+      return `${value}`;
     }
 }
 
-function refreshToolTip(axisY, axisX, circles) {
 
-    if (axisY === 'age') {
-        var labelY = 'Age:';
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
+
+    if (chosenXAxis === 'smokes') {
+      var xLabel = 'Smoker:';
     }
-    else if (aixsY === 'poverty') {
-        var labelY = 'Poverty:';
+    
+    else if (chosenXAxis === 'obesity'){
+      var xLabel = 'Obesity:';
     }
+    
     else {
-        var labelY = 'Median Income:';
+      var xLabel = 'Without Healthcare:';
     }
 
-    if (axisX === 'smokes') {
-        var labelX = 'Smoker';
-    }
-    else if (axisX === 'healthcare') {
-        var labelX = 'No Healthcare:';
-    }
-    else {
-        var labelX = 'Obesity';
-    }
+  if (chosenYAxis ==='age') {
+    var yLabel = "Age:"
+  }
+  else if(chosenYAxis === 'income') {
+    var yLabel = 'Income:';
+  }
+  else{
+    var yLabel = 'Poverty:';
+  }
 
-    var toolTip = d3.tip().attr('class', 'd3-tip').offset([-8, 0]).html(function(d) {
-        return (`${d.state}<br>${labelY} ${styleY(d[axisY], axisY)}<br>${labelX} ${d[axisX]}%`)
-    });
+  var toolTip = d3.tip().attr('class', 'd3-tip').offset([-8, 0]).html(function(d) {
+        
+    return (`${d.state}<br>${xLabel} ${styleX(d[chosenXAxis], chosenXAxis)}<br>${yLabel} ${d[chosenYAxis]}%`);
+  });
 
-    circles.call(toolTip);
+  circlesGroup.call(toolTip);
 
-    circles.on('mouseover', toolTip.show).on('mouseout', toolTip.hide);
+  circlesGroup.on('mouseover', toolTip.show).on('mouseout', toolTip.hide);
 
-    return circles;
+    return circlesGroup;
 }
 
-d3.csv('./assets/data/data.csv').then(function(allData) {
+d3.csv('./assets/data/data.csv').then(function(censusData) {
 
-    console.log(allData);
+    console.log(censusData);
 
-    allData.forEach((data) => {
+    censusData.forEach(function(data){
         data.obesity = +data.obesity;
         data.income = +data.income;
         data.smokes = +data.smokes;
@@ -125,12 +128,26 @@ d3.csv('./assets/data/data.csv').then(function(allData) {
         data.poverty = +data.poverty;
     });
 
-    var scaleLinearY = scaleY(allData, axisY);
-    var scaleLinearX = scaleX(allData, axisX);
-    var axisLeft = d3.leftAxis(scaleLinearY);
-    var axisBottom = d3.bottomAxis(scaleLinearX);
+ 
     
-    var x = scatAll.append('g').classed('x-axis', true).attr('transform', 'translate(0, ${height})').call(axisBottom);
-    var y = scatAll.append('g').classed('y-axis', true).call(axisLeft);
+    var yLinearScale = yScale(censusData, chosenYAxis);
+    var xLinearScale = xScale(censusData, chosenXAxis);
+    var leftAxis = d3.axisLeft(yLinearScale);
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    
 
-})
+    var yAxis = chartGroup.append('g').classed('y-axis', true).call(leftAxis);
+    var xAxis = chartGroup.append('g').classed('x-axis', true).attr('transform', `translate(0, ${height})`).call(bottomAxis);
+
+    var textGroup = chartGroup.selectAll('.stateText')
+    .data(censusData)
+    .enter()
+    .append('text')
+    .classed('stateText', true)
+    .attr('x', d => xLinearScale(d[chosenXAxis]))
+    .attr('y', d => yLinearScale(d[chosenYAxis]))
+    .attr('dy', 3)
+    .attr('font-size', '10px')
+    .text(function(d){return d.abbr});
+
+});
