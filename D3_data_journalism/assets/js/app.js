@@ -168,9 +168,17 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .classed('aText', true)
     .classed('inactive', true)
     .attr('x', 0)
-    .attr('y', 40)
+    .attr('y', 20)
     .attr('value', 'age')
     .text('Age'); 
+
+    var povertyLabel = yLabelsGroup.append('text')
+      .classed('aText', true)
+      .classed('active', true)
+      .attr('x', 0)
+      .attr('y', 40)
+      .attr('value', 'poverty')
+      .text('In Poverty (%)');
 
     var incomeLabel = yLabelsGroup.append('text')
     .classed('aText', true)
@@ -179,17 +187,21 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
     .attr('y', 60)
     .attr('value', 'income')
     .text('Household Income');
-
-    var povertyLabel = yLabelsGroup.append('text')
-      .classed('aText', true)
-      .classed('active', true)
-      .attr('x', 0)
-      .attr('y', 20)
-      .attr('value', 'poverty')
-      .text('In Poverty (%)');
        
 
     var xLabelsGroup = chartGroup.append('g').attr('transform', `translate(${0 - margin.left/4}, ${height/2})`);
+
+    
+
+    var obesityLabel = xLabelsGroup.append('text')
+        .classed('aText', true)
+        .classed('inactive', true)
+        .attr('x', 0)
+        .attr('y', 0 - 20)
+        .attr('dy', '1em')
+        .attr('transform', 'rotate(-90)')
+        .attr('value', 'obesity')
+        .text('Obese (%)');
 
     var smokesLabel = xLabelsGroup.append('text')
         .classed('aText', true)
@@ -201,21 +213,11 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
         .attr('value', 'smokes')
         .text('Smoker (%)');
 
-    var obesityLabel = xLabelsGroup.append('text')
-        .classed('aText', true)
-        .classed('inactive', true)
-        .attr('x', 0)
-        .attr('y', 0 - 60)
-        .attr('dy', '1em')
-        .attr('transform', 'rotate(-90)')
-        .attr('value', 'obesity')
-        .text('Obese (%)');
-
     var healthcareLabel = xLabelsGroup.append('text')
         .classed('aText', true)
         .classed('active', true)
         .attr('x', 0)
-        .attr('y', 0 - 20)
+        .attr('y', 0 - 60)
         .attr('dy', '1em')
         .attr('transform', 'rotate(-90)')
         .attr('value', 'healthcare')
