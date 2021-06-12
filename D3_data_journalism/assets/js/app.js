@@ -221,8 +221,86 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
         .attr('value', 'healthcare')
         .text('Without Healthcare (%)');
       
- 
+    
+    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+    yLabelsGroup.selectAll('text')
+        .on('click', function() {
+            var value = d3.select(this).attr('value');
+
+            if(value !=chosenYAxis) {
+
+                chosenYAxis = value;
+                yLinearScale = yScale(censusData, chosenYAxis);
+                yAxis = renderYAxis(yLinearScale, yAxis);
+                circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+                textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+                circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+                if (chosenYAxis === 'age') {
+                    obesityLabel.classed('active', false).classed('inactive', true);
+                    smokesLabel.classed('active', true).classed('inactive', false);
+                    healthcareLabel.classed('active', false).classed('inactive', true);
+                }
+                else if (chosenYAxis === 'poverty') {
+                    obesityLabel.classed('active', true).classed('inactive', false);
+                    smokesLabel.classed('active', false).classed('inactive', true);
+                    healthcareLabel.classed('active', false).classed('inactive', true);
+                }
+                else {
+                    obesityLabel.classed('active', false).classed('inactive', true);
+                    smokesLabel.classed('active', false).classed('inactive', true);
+                    healthcareLabel.classed('active', true).classed('inactive', false);
+                }
+            }
+        });
+
+
+    xLabelsGroup.selectAll('text')
+        .on('click', function() {
+            var value = d3.select(this).attr('value');
+
+            if (value != chosenXAxis) {
+
+                chosenXAxis = value; 
+
+                xLinearScale = xScale(censusData, chosenXAxis);
+
+                xAxis = renderXAxis(xLinearScale, xAxis);
+
+                circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+                if (chosenXAxis === 'smokes') {
+                povertyLabel.classed('active', true).classed('inactive', false);
+                ageLabel.classed('active', false).classed('inactive', true);
+                incomeLabel.classed('active', false).classed('inactive', true);
+                }
+                else if (chosenXAxis === 'poverty') {
+                povertyLabel.classed('active', false).classed('inactive', true);
+                ageLabel.classed('active', true).classed('inactive', false);
+                incomeLabel.classed('active', false).classed('inactive', true);
+                }
+                else {
+                povertyLabel.classed('active', false).classed('inactive', true);
+                ageLabel.classed('active', false).classed('inactive', true);
+                incomeLabel.classed('active', true).classed('inactive', false);
+                }
+            }
+        });
+        
+});
+    
+    
+
+
+
+    
+    
   
-  
+    
  
 });
