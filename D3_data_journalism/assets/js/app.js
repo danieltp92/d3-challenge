@@ -1,24 +1,24 @@
 
-var svgHeight = 700;
-var svgWidth = 1200;
-var margin = {
+let svgHeight = 700;
+let svgWidth = 1200;
+let margin = {
     top: 10,
     bottom: 50,
     right: 20,
     left: 40
 }
 
-var height = svgHeight - margin.bottom - margin.top;
-var width = svgWidth - margin.left - margin.right;
+let height = svgHeight - margin.bottom - margin.top;
+let width = svgWidth - margin.left - margin.right;
 
-var scat = d3.select("#scatter").append('div').classed('chart', true);
+let scat = d3.select("#scatter").append('div').classed('chart', true);
 
-var svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
+let svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
 
-var scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+let scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-var axisY = 'age';
-var axisX = 'smokes';
+let axisY = 'age';
+let axisX = 'smokes';
 
 function scaleY(allData, axisY) {
     let scaleY = d3.scaleLinear().domain([d3.min(allData, d => d[axisY]) * 0.8,
@@ -36,7 +36,7 @@ function scaleX(allData, axisX) {
     return scaleX;
 }
 
-function axisY(scaleY, y) {
+function funAxisY(scaleY, y) {
     let axis1 = d3.leftAxis(scaleY);
 
     y.transition().duration(1500).call(axis1);
@@ -44,24 +44,24 @@ function axisY(scaleY, y) {
     return y;
 }
 
-function axisX(scaleX, x) {
-    let axis2 = d3.bottomAxis(scaleX);
+function funAxisX(scaleX, x) {
+    var axis2 = d3.bottomAxis(scaleX);
 
     x.transition().duration(1500).call(axis2);
 
     return x;
 }
 
-function circles(allCircles, scaleY, scaleX, axisY, axisX) {
+function circles(allCircles, scaleY, scaleX, funAxisY, funAxisX) {
 
-    allCircles.transition().duration(1500).attr('cy', data => scaleY(data[axisY])).attr('cx', data => scaleX(data[axisX]))
+    allCircles.transition().duration(1500).attr('cy', data => scaleY(data[funAxisY])).attr('cx', data => scaleX(data[funAxisX]))
 
     return allCircles;
 }
 
-function text(allText, scaleY, scaleX, axisY, axisX) {
+function text(allText, scaleY, scaleX, funAxisY, funAxisX) {
 
-    allText.transition().duration(1500).attr('y', data => scaleY(data[axisY])).attr('x', data => scaleX(data[axisX]))
+    allText.transition().duration(1500).attr('y', data => scaleY(data[funAxisY])).attr('x', data => scaleX(data[funAxisX]))
 
     return allCircles;
 }
@@ -124,4 +124,13 @@ d3.csv('./assets/data/data.csv').then(function(allData) {
         data.healthcare = +data.healthcare;
         data.poverty = +data.poverty;
     });
+
+    var scaleLinearY = scaleY(allData, axisY);
+    var scaleLinearX = scaleX(allData, axisX);
+    var axisLeft = d3.leftAxis(scaleLinearY);
+    var axisBottom = d3.bottomAxis(scaleLinearX);
+    
+    var x = scatAll.append('g').classed('x-axis', true).attr('transform', 'translate(0, ${height})').call(axisBottom);
+    var y = scatAll.append('g').classed('y-axis', true).call(axisLeft);
+
 })
