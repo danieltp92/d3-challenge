@@ -164,6 +164,22 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
       
     var yLabelsGroup = chartGroup.append('g').attr('transform', `translate(${width / 2}, ${height + 10 + margin.top})`);
 
+    var ageLabel = yLabelsGroup.append('text')
+    .classed('aText', true)
+    .classed('inactive', true)
+    .attr('x', 0)
+    .attr('y', 40)
+    .attr('value', 'age')
+    .text('Age (Median)'); 
+
+    var incomeLabel = yLabelsGroup.append('text')
+    .classed('aText', true)
+    .classed('inactive', true)
+    .attr('x', 0)
+    .attr('y', 60)
+    .attr('value', 'income')
+    .text('Household Income (Median)');
+
     var povertyLabel = yLabelsGroup.append('text')
       .classed('aText', true)
       .classed('active', true)
@@ -171,22 +187,42 @@ d3.csv('./assets/data/data.csv').then(function(censusData) {
       .attr('y', 20)
       .attr('value', 'poverty')
       .text('In Poverty (%)');
+       
+
+    var xLabelsGroup = chartGroup.append('g').attr('transform', `translate(${0 - margin.left/4}, ${height/2})`);
+
+    var smokesLabel = xLabelsGroup.append('text')
+        .classed('aText', true)
+        .classed('inactive', true)
+        .attr('x', 0)
+        .attr('y', 0 - 40)
+        .attr('dy', '1em')
+        .attr('transform', 'rotate(-90)')
+        .attr('value', 'smokes')
+        .text('Smoker (%)');
+
+    var obesityLabel = xLabelsGroup.append('text')
+        .classed('aText', true)
+        .classed('inactive', true)
+        .attr('x', 0)
+        .attr('y', 0 - 60)
+        .attr('dy', '1em')
+        .attr('transform', 'rotate(-90)')
+        .attr('value', 'obesity')
+        .text('Obese (%)');
+
+    var healthcareLabel = xLabelsGroup.append('text')
+        .classed('aText', true)
+        .classed('active', true)
+        .attr('x', 0)
+        .attr('y', 0 - 20)
+        .attr('dy', '1em')
+        .attr('transform', 'rotate(-90)')
+        .attr('value', 'healthcare')
+        .text('Without Healthcare (%)');
       
-    var ageLabel = yLabelsGroup.append('text')
-      .classed('aText', true)
-      .classed('inactive', true)
-      .attr('x', 0)
-      .attr('y', 40)
-      .attr('value', 'age')
-      .text('Age (Median)');  
-
-    var incomeLabel = yLabelsGroup.append('text')
-      .classed('aText', true)
-      .classed('inactive', true)
-      .attr('x', 0)
-      .attr('y', 60)
-      .attr('value', 'income')
-      .text('Household Income (Median)')
-
+ 
+  
+  
  
 });
