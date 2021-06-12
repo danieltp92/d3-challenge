@@ -79,3 +79,35 @@ function xStyle(value, axisX) {
     }
 }
 
+function refreshToolTip(axisY, axisX, circles) {
+
+    if (axisY === 'age') {
+        var labelY = 'Age:';
+    }
+    else if (aixsY === 'poverty') {
+        var labelY = 'Poverty:';
+    }
+    else {
+        var labelY = 'Median Income:';
+    }
+
+    if (axisX === 'smoker') {
+        var labelX = 'Smoker';
+    }
+    else if (axisX === 'healthcare') {
+        var labelX = 'No Healthcare:';
+    }
+    else {
+        var labelX = 'Obesity';
+    }
+
+    var toolTip = d3.tip().attr('class', 'd3-tip').offset([-8, 0]).html(function(d) {
+        return (`${d.state}<br>${labelY} ${styleY(d[axisY], axisY)}<br>${labelX} ${d[axisX]}%`)
+    });
+
+    circles.call(toolTip);
+
+    circles.on('mouseover', toolTip.show).on('mouseout', toolTip.hide);
+
+    return circles;
+}
