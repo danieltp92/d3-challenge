@@ -18,19 +18,19 @@ var svg = scat.append('svg').attr('height', svgHeight).attr('width', svgWidth);
 var scatAll = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
 var axisY = 'age';
-var axisX = 'smoker';
+var axisX = 'smokes';
 
-function scaleY(censusData, axisY) {
-    let scaleY = d3.scaleLinear().domain([d3.min(censusData, d => d[axisY]) * 0.8,
-                                          d3.max(censusData, d => d[axisY]) * 1.2])
+function scaleY(allData, axisY) {
+    let scaleY = d3.scaleLinear().domain([d3.min(allData, d => d[axisY]) * 0.8,
+                                          d3.max(allData, d => d[axisY]) * 1.2])
                                  .range([height, 0]);
                         
     return scaleY;
 }
 
-function scaleX(censusData, axisX) {
-    let scalex = d3.scaleLinear().domain([d3.min(censusData, d => d[axisX]) * 0.8,
-                                          d3.max(censusData, d => d[axisX]) * 1.2])
+function scaleX(allData, axisX) {
+    let scalex = d3.scaleLinear().domain([d3.min(allData, d => d[axisX]) * 0.8,
+                                          d3.max(allData, d => d[axisX]) * 1.2])
                                  .range([height, 0]);
                         
     return scaleX;
@@ -91,7 +91,7 @@ function refreshToolTip(axisY, axisX, circles) {
         var labelY = 'Median Income:';
     }
 
-    if (axisX === 'smoker') {
+    if (axisX === 'smokes') {
         var labelX = 'Smoker';
     }
     else if (axisX === 'healthcare') {
@@ -111,3 +111,17 @@ function refreshToolTip(axisY, axisX, circles) {
 
     return circles;
 }
+
+d3.csv('./assets/data/data.csv').then(function(allData) {
+
+    console.log(allData);
+
+    allData.forEach((data) => {
+        data.obesity = +data.obesity;
+        data.income = +data.income;
+        data.smokes = +data.smokes;
+        data.age = +data.age;
+        data.healthcare = +data.healthcare;
+        data.poverty = +data.poverty;
+    });
+})
